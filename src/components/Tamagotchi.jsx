@@ -1,5 +1,7 @@
 import React from 'react';
 import panda from '../../src/Images/hamsterSheet.png';
+import overlay from '../../src/Images/overlay.png';
+
 
 
 class Tamagotchi extends React.Component {
@@ -33,9 +35,10 @@ class Tamagotchi extends React.Component {
 
   handleAliveStatus() {
     var newAliveStatus;
-    if (this.state.feedCount <= 0 || this.state.sleepCount <= 0 || this.state.playCount <= 0) { newAliveStatus = 'DEAD';
+    if (this.state.feedCount <= 0 || this.state.sleepCount <= 0 || this.state.playCount <= 0) {
+      newAliveStatus = 'DEAD';
       this.setState({ aliveStatus: newAliveStatus });
-    }else{
+    } else {
       newAliveStatus = 'ALIVE';
       this.setState({ aliveStatus: newAliveStatus });
     }
@@ -44,11 +47,14 @@ class Tamagotchi extends React.Component {
 
   showSprite() {
     var sprite;
+
     if (this.state.feedCount <= 0 || this.state.sleepCount <= 0 || this.state.playCount <= 0) {         //dead branch
       sprite = {
         width: '170px',
         height: '170px',
-        background: `url(${panda}) -50px -100px`      
+        zIndex: '-1000',
+        background: `url(${panda}) -50px -100px`,
+        position: 'relative'
       };
 
       return <div style={sprite}></div>;
@@ -107,44 +113,52 @@ class Tamagotchi extends React.Component {
   componentDidMount() {
     this.checkAliveStatusTimer = setInterval(() =>
       this.handleAliveStatus(),
-    1000
+      1000
     );
 
     this.checkFeedTimer = setInterval(() =>
       this.feedDecay(),
-    10000
+      10000
     );
 
     this.checkSleepTimer = setInterval(() =>
       this.sleepDecay(),
-    1000
+      1000
     );
 
     this.checkPlayTimer = setInterval(() =>
       this.playDecay(),
-    100
+      100
     );
   }
 
 
 
   render() {
-  
+    const overlayStyles = {
+      background: `url(${overlay})`,
+      height: 1000,
+      width: 1000,
+      backgroundRepeat: 'no-repeat',
+      zIndex: 100,
+      position: 'absolute'
+    }
     return (
       <div>
-        <div>
+        <div style={overlayStyles}>
           <div>
             <h4>Food: {this.state.feedCount}</h4>
             <h4> Sleep: {this.state.sleepCount}</h4>
             <h4>Play: {this.state.playCount}</h4>
             <h4>{this.state.aliveStatus}</h4>
           </div>
-          {this.showSprite()}
-
+          <div >
+            {this.showSprite()}
+          </div>
+          <button className="btn-floating btn-large waves-effect waves-light red" onClick={this.handleFeed}>Feed</button>
+          <button className="btn-floating btn-large waves-effect waves-light red" onClick={this.handleSleep}>Sleep</button>
+          <button className="btn-floating btn-large waves-effect waves-light red" onClick={this.handlePlay}>Play</button>
         </div>
-        <button className="waves-effect waves-light btn" onClick={this.handleFeed}>Feed me!</button>
-        <button className="waves-effect waves-light btn" onClick={this.handleSleep}>Let me sleep!</button>
-        <button className="waves-effect waves-light btn" onClick={this.handlePlay}>Let's Play</button>
       </div>
     );
   }
