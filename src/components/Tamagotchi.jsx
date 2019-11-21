@@ -1,6 +1,7 @@
 import React from 'react';
 import panda from '../../src/Images/hamsterSheet.png';
 import overlay from '../../src/Images/overlay.png';
+import FadeIn from 'react-fade-in';
 
 
 
@@ -50,19 +51,25 @@ class Tamagotchi extends React.Component {
 
     if (this.state.feedCount <= 0 || this.state.sleepCount <= 0 || this.state.playCount <= 0) {         //dead branch
       sprite = {
-        width: '170px',
-        height: '170px',
+        width: '172px',
+        height: '172px',
         zIndex: '-1000',
-        background: `url(${panda}) -50px -100px`,
-        position: 'relative'
+        position: 'relative',
+        marginLeft: '54.9%',
+        marginTop: '9.7%',
+        background: `url(${panda}) -50px -100px`
       };
 
       return <div style={sprite}></div>;
 
     } else if (this.state.feedCount > 50 && this.state.sleepCount > 50 && this.state.playCount > 50) {    //healthy branch
       sprite = {
-        width: '170px',
-        height: '170px',
+        width: '172px',
+        height: '172px',
+        zIndex: '-1000',
+        position: 'relative',
+        marginLeft: '54.9%',
+        marginTop: '9.7%',
         background: `url(${panda}) -985px -93px`
       };
 
@@ -70,8 +77,12 @@ class Tamagotchi extends React.Component {
 
     } else if (this.state.feedCount < 50) {    //hungry branch
       sprite = {
-        width: '170px',
-        height: '170px',
+        width: '172px',
+        height: '172px',
+        zIndex: '-1000',
+        position: 'relative',
+        marginLeft: '54.9%',
+        marginTop: '9.7%',
         background: `url(${panda}) -1185px -300px`
       };
 
@@ -79,8 +90,12 @@ class Tamagotchi extends React.Component {
 
     } else if (this.state.sleepCount < 50) {    //sleepy branch
       sprite = {
-        width: '170px',
-        height: '170px',
+        width: '172px',
+        height: '172px',
+        zIndex: '-1000',
+        position: 'relative',
+        marginLeft: '54.9%',
+        marginTop: '9.7%',
         background: `url(${panda}) -38px -310px`
       };
 
@@ -88,8 +103,12 @@ class Tamagotchi extends React.Component {
 
     } else if (this.state.playCount < 50) {    //bored branch
       sprite = {
-        width: '170px',
-        height: '170px',
+        width: '172px',
+        height: '172px',
+        zIndex: '-1000',
+        position: 'relative',
+        marginLeft: '54.9%',
+        marginTop: '9.7%',
         background: `url(${panda}) -780px -295px`
       };
 
@@ -113,52 +132,100 @@ class Tamagotchi extends React.Component {
   componentDidMount() {
     this.checkAliveStatusTimer = setInterval(() =>
       this.handleAliveStatus(),
-      1000
+    1000
     );
 
     this.checkFeedTimer = setInterval(() =>
       this.feedDecay(),
-      10000
+    10000
     );
 
     this.checkSleepTimer = setInterval(() =>
       this.sleepDecay(),
-      1000
+    1000
     );
 
     this.checkPlayTimer = setInterval(() =>
       this.playDecay(),
-      100
+    100
     );
   }
 
 
 
   render() {
-    const overlayStyles = {
-      background: `url(${overlay})`,
-      height: 1000,
-      width: 1000,
-      backgroundRepeat: 'no-repeat',
+    const imgOverlay = {
+      // height: 1000,
+      // width: 1000,
       zIndex: 100,
-      position: 'absolute'
-    }
+      position: 'absolute',
+      display: 'inline',
+      marginLeft: '50%',
+    };
+
+    const feedButtonAlign = {
+      // width: 1000,
+      zIndex: 1001,
+      position: 'absolute',
+      display: 'inline',
+      marginLeft: '54.8%',
+      marginTop: '2%'
+    };
+
+    const playButtonAlign = {
+      // height: '5vmax',
+      // width: 1000,
+      zIndex: 1001,
+      position: 'absolute',
+      display: 'inline',
+      marginLeft: '61%',
+      marginTop: '2%'
+    };
+
+    const sleepButtonAlign = {
+      height: '70px',
+      // width: 1000,
+      zIndex: 1001,
+      position: 'absolute',
+      display: 'inline',
+      marginLeft: '57.8%',
+      marginTop: '2.8%'
+    };
+
+    const container = {
+      width: '2000px',
+      height: '2000px',
+      position: 'fixed'
+    };
+    const spriteContainer = {
+      width: '172px',
+      height: '172px',
+      position: 'relative',
+      marginLeft: '50.2%',
+      marginTop: '9.7%',
+    };
+
     return (
-      <div>
-        <div style={overlayStyles}>
+      <div style={container}>
+        <FadeIn transitionDuration={1000}>
           <div>
-            <h4>Food: {this.state.feedCount}</h4>
-            <h4> Sleep: {this.state.sleepCount}</h4>
-            <h4>Play: {this.state.playCount}</h4>
-            <h4>{this.state.aliveStatus}</h4>
+            <div>
+              <h4>Food: {this.state.feedCount}</h4>
+              <h4> Sleep: {this.state.sleepCount}</h4>
+              <h4>Play: {this.state.playCount}</h4>
+              <h4>Status: {this.state.aliveStatus}</h4>
+            </div>
+
+            <img style={imgOverlay} src={overlay} />
+            <div style={spriteContainer}>
+              {this.showSprite()}
+            </div>
+
+            <button style={feedButtonAlign} className="btn-floating btn-large waves-effect waves-light red" onClick={this.handleFeed}>Feed</button>
+            <button style={sleepButtonAlign} className="btn-floating btn-large waves-effect waves-light red" onClick={this.handleSleep}>Sleep</button>
+            <button style={playButtonAlign} className="btn-floating btn-large waves-effect waves-light red" onClick={this.handlePlay}>Play</button>
           </div>
-          <div >
-            {this.showSprite()}
-          </div>
-          <button className="btn-floating btn-large waves-effect waves-light red" onClick={this.handleFeed}>Feed</button>
-          <button className="btn-floating btn-large waves-effect waves-light red" onClick={this.handleSleep}>Sleep</button>
-          <button className="btn-floating btn-large waves-effect waves-light red" onClick={this.handlePlay}>Play</button>
-        </div>
+        </FadeIn>
       </div>
     );
   }
