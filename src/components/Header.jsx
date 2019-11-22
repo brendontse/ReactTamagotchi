@@ -5,8 +5,8 @@ function Header() {
   return (
     <div>
       <nav>
-        <div class="nav-wrapper">
-          <a href="#" class="brand-logo"><h1>React Tamagotchi</h1></a>
+        <div className="nav-wrapper">
+          <Link className="brand-logo" to='/'>React Tamagotchi</Link>
         </div>
       </nav>
     </div>
